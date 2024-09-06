@@ -81,7 +81,7 @@ export const loginController = async (req, res) => {
     }
    
     //token
-    const token = await JWT.sign({ _id: user._id }, SECRET, {
+    const token = await JWT.sign({ _id: user._id }, "SECRET", {
       expiresIn: "7d",
     });
     res.status(200).send({
