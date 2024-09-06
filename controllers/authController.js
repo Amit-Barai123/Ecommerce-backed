@@ -79,13 +79,7 @@ export const loginController = async (req, res) => {
         message: "Email is not registerd",
       });
     }
-    const match = await user.password==password;
-    if (!match) {
-      return res.status(200).send({
-        success: false,
-        message: "Invalid Password",
-      });
-    }
+   
     //token
     const token = await JWT.sign({ _id: user._id }, SECRET, {
       expiresIn: "7d",
