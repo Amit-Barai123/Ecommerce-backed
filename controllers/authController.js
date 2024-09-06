@@ -1,7 +1,5 @@
 import userModel from "../models/userModel.js";
 import orderModel from "../models/orderModel.js";
-
-import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from "jsonwebtoken";
 
 export const registerController = async (req, res) => {
@@ -36,14 +34,14 @@ export const registerController = async (req, res) => {
       });
     }
     //register user
-    const hashedPassword = await hashPassword(password);
+   
     //save
     const user = await new userModel({
       name,
       email,
       phone,
       address,
-      password: hashedPassword,
+      password,
       answer,
     }).save();
 
@@ -81,7 +79,7 @@ export const loginController = async (req, res) => {
         message: "Email is not registerd",
       });
     }
-    const match = await comparePassword(password, user.password);
+    const match = await user.password==password;
     if (!match) {
       return res.status(200).send({
         success: false,
@@ -89,7 +87,7 @@ export const loginController = async (req, res) => {
       });
     }
     //token
-    const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    const token = await JWT.sign({ _id: user._id }, SECRET, {
       expiresIn: "7d",
     });
     res.status(200).send({
